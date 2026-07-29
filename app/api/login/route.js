@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createSession } from '../../../lib/auth';
 
-const ACCESS_CODE = process.env.ACCESS_CODE || '873104';
+const ACCESS_CODE = process.env.ACCESS_CODE || '';
 
 export async function POST(request) {
   let code = '';
@@ -9,7 +9,7 @@ export async function POST(request) {
     const body = await request.json();
     code = String(body?.code ?? '');
   } catch {}
-  if (code !== ACCESS_CODE) {
+  if (!ACCESS_CODE || code !== ACCESS_CODE) {
     return NextResponse.json({ ok: false, error: 'Onjuiste code' }, { status: 401 });
   }
   const token = await createSession();
